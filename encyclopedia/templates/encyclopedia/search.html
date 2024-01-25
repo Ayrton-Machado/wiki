@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block body %}
-    {{entry | safe}}
+    {{search | safe}}
 {% endblock %}
 
 {% block nav %}
@@ -14,7 +14,7 @@
     <ul>
         {% for entry in entries %}
             <li>
-                <a href="{% url 'entry' title=entry%}">{{ entry }}</a>
+                <a>{{ entry }}</a>
             </li>
         {% endfor %}
     </ul>
