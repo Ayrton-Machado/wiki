@@ -29,6 +29,7 @@ def entry(request, title):
 
 def search(request):
     if request.method == 'POST':
+        entries_found = []
         entries_all = util.list_entries()
         form = searchForm(request.POST)
         if form.is_valid():
@@ -38,7 +39,10 @@ def search(request):
                     title = entry
                     entry = util.get_entry(title)
                     return HttpResponseRedirect(reverse('entry', args=[title]))
+                if text_field.lower() in entry.lower():
+                    entries_found.append(entry)
             return render(request, 'encyclopedia/search.html', {
+                'results': entries_found,
                 'text_field': text_field,
                 'form': searchForm()
             })
