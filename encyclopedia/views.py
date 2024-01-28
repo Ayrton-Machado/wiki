@@ -2,13 +2,19 @@ from django.shortcuts import render
 from markdown2 import Markdown
 from django import forms
 from . import util
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
-class search(forms.Form):
-    text_field = forms.CharField(label='Search ', required=False)
+class searchForm(forms.Form):
+    text_field = forms.CharField(label='', widget = forms.TextInput(attrs={
+    'placeholder': 'Search Wiki', 
+    'style': 'width 100%'
+    }))
 
 def index(request):
     return render(request, "encyclopedia/index.html", {
         "entries": util.list_entries(),
+        "form": searchForm()
     })
 
 def entry(request, title):
@@ -17,19 +23,26 @@ def entry(request, title):
     return render(request, "encyclopedia/entry.html", {
         "entries": util.list_entries(),
         'entry': entry_HTML,
-        'title': title
+        'title': title,
+        'form': searchForm()
     })
 
-def search(request, title):
-    search_form = search(request.POST)
+def search(request):
     if request.method == 'POST':
-        if search_form.is_valid():
-            search_query = search_form.cleaned_data['text_field']
-            search_md = util.get_entry(search_query)
-            search_HTML = Markdown().convert(search.md)
+        entries_all = util.list_entries()
+        form = searchForm(request.POST)
+        if form.is_valid():
+            text_field = form.cleaned_data['text_field']
+            for entry in entries_all:
+                if text_field.lower() == entry.lower():
+                    title = entry
+                    entry = util.get_entry(title)
+                    return HttpResponseRedirect(reverse('entry', args=[title]))
             return render(request, 'encyclopedia/search.html', {
-                "entries": util.list_entries(),
-                'search': search_HTML,
-                'search_query': search_query,
-                'title': title
+                'text_field': text_field,
+                'form': searchForm()
             })
+    return render(request, 'encyclopedia/search.html', {
+        'text_field': '',
+        "form": SearchForm()
+    })
