@@ -12,15 +12,3 @@
         <input style="margin: 10px; width: 80%;" type="submit" name="submit" value="create">
     </form>
 {% endblock %}
-
-{% block nav %}
-    <h1>All Pages</h1>
-
-    <ul>
-        {% for entry in entries %}
-            <li>
-                <a href="{% url 'entry' title=entry%}">{{ entry }}</a>
-            </li>
-        {% endfor %}
-    </ul>
-{% endblock %}

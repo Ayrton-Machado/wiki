@@ -6,16 +6,8 @@
 
 {% block body %}
     {{entry | safe}}
-{% endblock %}
-
-{% block nav %}
-    <h1>All Pages</h1>
-
-    <ul>
-        {% for entry in entries %}
-            <li>
-                <a href="{% url 'entry' title=entry%}">{{ entry }}</a>
-            </li>
-        {% endfor %}
-    </ul>
+    <form action="{% url 'edit' title%}" method="post" style="display: flex; flex-direction: column; align-items: center;">
+        {% csrf_token %}
+        <button>Edit</button>
+    </form>
 {% endblock %}
