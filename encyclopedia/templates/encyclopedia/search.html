@@ -1,15 +1,19 @@
 {% extends 'encyclopedia/layout.html' %}
 
+{% block title %}
+    Search
+{% endblock %}
+
 {% block body %}
-<h1> Search results </h1>
-<h5 style="font-weight: 400;"> Matches Found </h5>
-    <ul>    
-        {% for results in results %}
-            <li><a href="{% url 'entry' results %}">{{ results }}</a></li>
-        {% empty %}
-            <li>No Results</li>
-        {% endfor %}
-    </ul>
+<h1 style="text-align: left; padding-left: 20px;"> Search results </h1>
+    <h5 style="padding-left: 20px; text-align: left;"> Matches Found </h5>
+        <ul style="text-align: left;">    
+            {% for results in results %}
+                <li><a href="{% url 'entry' results %}">{{ results }}</a></li>
+            {% empty %}
+                <li>No Results</li>
+            {% endfor %}
+        </ul>
 {% endblock %}
 
 {% block nav %}

@@ -4,19 +4,23 @@ from django import forms
 from . import util
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+import random
 
 class searchForm(forms.Form):
     text_field = forms.CharField(label='', widget = forms.TextInput(attrs={
     'placeholder': 'Search Wiki', 
-    'style': 'width 100%'
+    'style': 'width 10%'
     }))
 
 class CreatePage(forms.Form):
     createTitle = forms.CharField(label='', widget=forms.TextInput(attrs={
         'placeholder': 'Title',
+        'style': 'width: 80%; margin: 10px;'
+        
     }))
-    createContent = forms.CharField(label='', widget=forms.TextInput(attrs={
+    createContent = forms.CharField(label='', widget=forms.Textarea(attrs={
         'placeholder': 'Content',
+        'style': 'height: 60vh;' 
     }))
 
 def index(request):
@@ -29,6 +33,7 @@ def entry(request, title):
     entry_md = util.get_entry(title)
     if entry_md is None:
         return(render(request, 'encyclopedia/error.html',{
+            'entries': util.list_entries(), 
             'title': title,
             "form": searchForm()
         }))
@@ -67,17 +72,27 @@ def search(request):
 
 def create(request):
     if request.method == 'POST':
-        create_title = CreatePage(request.POST)
         create_content = CreatePage(request.POST)
-        if create_title.is_valid():
-            if create_content.is_valid():
-                title = create_title.cleaned_data['createTitle']
-                content = create_content.cleaned_data['createContent']
-                util.save_entry(title, content)
-                return HttpResponseRedirect(reverse('entry', args=[title]))
+        if create_content.is_valid():
+            title = create_content.cleaned_data['createTitle']
+            content = create_content.cleaned_data['createContent']
+            new_title = '# ' + title
+            new_data = '\n' + content
+            new_content = new_title + new_data
+            util.save_entry(title, new_content)
+            return HttpResponseRedirect(reverse('entry', args=[title]))
     return render(request, 'encyclopedia/create.html', {
         "entries": util.list_entries(),
         'form': searchForm(),
-        'title_form': CreatePage(),
         'content_form': CreatePage()
+    })
+
+def randomPage(request):
+    entries = util.list_entries()
+    title = random.choice(entries)
+    title = util.get_entry(title)
+    return render(request, 'encyclopedia/entry.html', {
+        'form': searchForm(),
+        'entries': util.list_entries(),
+        'entry': Markdown().convert(title)
     })
