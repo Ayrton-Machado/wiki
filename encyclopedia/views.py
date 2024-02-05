@@ -96,14 +96,12 @@ def create(request):
 def randomPage(request):
     entries = util.list_entries()
     title = random.choice(entries)
-    entry = util.get_entry(title)
     return HttpResponseRedirect(reverse('entry', args=[title]))
 
 def edit(request, title):
     if request.method == 'POST':
-        entry = title
-        content = util.get_entry(entry)
-        edit = EditPage(initial={"editTitle":entry, 'editContent':content})
+        content = util.get_entry(title)
+        edit = EditPage(initial={"editTitle":title,'editContent':content})
         return render(request, 'encyclopedia/edit.html', {
             'edit': edit,
             'title': title,
@@ -112,17 +110,15 @@ def edit(request, title):
         })
 
 def submitEdit(request, title):
-    if request.method == 'post':
-        entry = EditPage(request.POST)
-        if entry.is_valid():
-            title = entry.cleaned_data['editTitle']
-            content = entry.cleaned_data['editContent']
-            content = Markdown().convert(content)
-            newEntry = util.get_entry(title)
-            util.save_entry(title, content)
+    if request.method == 'POST':
+        form = EditPage(request.POST)
+        if form.is_valid():
+            new_title = form.cleaned_data['editTitle']
+            new_content = form.cleaned_data['editContent']
+            util.save_entry(new_title, new_content)
         return render(request, 'encyclopedia/entry.html', {
             'title': title,
-            'entry': Markdown().convert(newEntry),
+            'entry': Markdown().convert(new_content),
             'form': searchForm(),   
             'entries': util.list_entries()
         })

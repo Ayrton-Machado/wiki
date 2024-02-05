@@ -5,7 +5,7 @@
     <form action="{% url 'submitEdit' title%}" method="post" style="display: flex; flex-direction: column; align-items: center;">
         {% csrf_token %}
         {{edit | safe}}
-        <input type="submit" name="submit" style="margin: 10px;"> 
+        <input style="margin: 10px; width: 80%;" type="submit" name="submit" value="Save">
     </form>
 {% endblock %}
 
