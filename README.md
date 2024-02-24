@@ -9,10 +9,6 @@ Design a Wikipedia-like online encyclopedia.
 
 ## How to run
 [Python3](https://www.python.org/) is a requirement.  
-- Open terminal in project folder
-  - (Optional) Create and activate a Python virtual environment
-    - Windows: `python -m venv .venv && .venv\Scripts\activate.bat`
-    - Linux: `python3 -m venv .venv && source .venv/bin/activate`
 - Install requirements with `pip install -r requirements`
 - Run with `python manage.py runserver` or `python3 manage.py runserver`
 
