@@ -5,7 +5,7 @@ CS50’s [Web Programming with Python and JavaScript](https://cs50.harvard.edu/w
 ## Project description
 Design a Wikipedia-like online encyclopedia.
 
-## git clone https://github.com/Ayrton-Machado/wiki-django
+## git clone https://github.com/Ayrton-Machado/wiki
 
 ## How to run
 [Python3](https://www.python.org/) is a requirement.  
